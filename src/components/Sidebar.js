@@ -10,39 +10,9 @@ import {
   faMagnifyingGlass
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-const endPoint = [
-  {
-    label: "Home",
-    key: "Home",
-    icon: <FontAwesomeIcon icon={faHouse} />
-  },
-  {
-    label: "Actor",
-    key: "Actor",
-    icon: <FontAwesomeIcon icon={faUser} />
-  },
-  {
-    label: "Film",
-    key: "Film",
-    icon: <FontAwesomeIcon icon={faFilm} />
-  },
-  {
-    label: "Search",
-    key: "Search",
-    icon: <FontAwesomeIcon icon={faMagnifyingGlass} />
-  },
-  {
-    label: "Account",
-    key: "Account",
-    icon: <FontAwesomeIcon icon={faCircleUser} />
-  },
-  {
-    label: "Log Out",
-    key: "Logout",
-    icon: <FontAwesomeIcon icon={faRightFromBracket} />
-  }
-];
+import SearchBar from "./Modals/SearchBar";
+import { AuthContext } from "../Context/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 
 const SideBarStyled = styled.div`
@@ -50,11 +20,52 @@ const SideBarStyled = styled.div`
 `
 
 export default function SideBar() {
-  const handleSelect = (selector)=>{
-
-  }
+  const { user } = React.useContext(AuthContext);
+  const navigate = useNavigate();
   const { Sider } = Layout;
+  const [openModal, setOpenModal] = React.useState(false);
   const [collapsed, setCollapsed] = React.useState(false);
+  const handleSelect = (selector)=>{
+    console.log(selector);
+    if(selector.key==="search"){
+      setOpenModal(true)
+    }
+    else{
+      navigate(`/${selector.key}`);
+    }
+  };
+  const endPoint = [
+    {
+      label: "Home",
+      key: "home",
+      icon: <FontAwesomeIcon icon={faHouse} />
+    },
+    {
+      label: "Actor",
+      key: "actors",
+      icon: <FontAwesomeIcon icon={faUser} />
+    },
+    {
+      label: "Film",
+      key: "films",
+      icon: <FontAwesomeIcon icon={faFilm} />
+    },
+    {
+      label: "Search",
+      key: "search",
+      icon: <FontAwesomeIcon icon={faMagnifyingGlass} />
+    },
+    {
+      label: "Account",
+      key: "Account",
+      icon: <FontAwesomeIcon icon={faCircleUser} />
+    },
+    user ? {
+      label: "Log Out",
+      key: "Logout",
+      icon: <FontAwesomeIcon icon={faRightFromBracket} />
+    } : null
+  ];
   return <Sider
     collapsible
     collapsed={collapsed}
@@ -67,10 +78,11 @@ export default function SideBar() {
     </SideBarStyled>
     <Menu
       theme="dark"
-      defaultSelectedKeys={["Home"]}
+      defaultSelectedKeys={["home"]}
       onSelect={handleSelect}
       mode="inline"
       items={endPoint}
     />
+    <SearchBar isOpen={openModal} setIsOpen={setOpenModal} />
   </Sider>;
 }

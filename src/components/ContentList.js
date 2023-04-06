@@ -1,8 +1,8 @@
 import React from 'react'
 import ContentCard from './ContentCard';
 import { Layout, Breadcrumb } from 'antd';
-import user from '../asset/user.png';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const ContentWrapperStyled = styled.div`
   display: flex;
@@ -22,7 +22,18 @@ const ContentStyled = styled(Content)`
 `;
 
 
-export default function ContentList() {
+export default function ContentList(props) {
+  const [ data, setData ] = React.useState([]);
+  const { type } = props;
+
+  React.useEffect(()=>{
+    axios.get(process.env.REACT_APP_API + type).then((result)=>{
+      console.log(result.data);
+      setData(result.data);
+    })
+  },[type]);
+
+
   return (
     <Layout style={{ backgroundColor: 'black' }}>
       <ContentStyled >
@@ -38,62 +49,17 @@ export default function ContentList() {
           ]}
         />
         <ContentWrapperStyled>
-          <ContentCard props={{
-            id: 1,
-            title: "Placeholder title",
-            image: user,
-            isLiked: true,
-            isFollowed: false
-          }} />
-          <ContentCard props={{
-            id: 1,
-            title: "Placeholder title",
-            image: user,
-            isLiked: true,
-            isFollowed: true
-          }} />
-          <ContentCard props={{
-            id: 1,
-            title: "Placeholder title",
-            image: user,
-            isLiked: false,
-            isFollowed: false
-          }} />
-          <ContentCard props={{
-            id: 1,
-            title: "Placeholder title",
-            image: user,
-            isLiked: false,
-            isFollowed: true
-          }} />
-          <ContentCard props={{
-            id: 1,
-            title: "Placeholder title",
-            image: user,
-            isLiked: true,
-            isFollowed: false
-          }} />
-          <ContentCard props={{
-            id: 1,
-            title: "Placeholder title",
-            image: user,
-            isLiked: true,
-            isFollowed: false
-          }} />
-          <ContentCard props={{
-            id: 1,
-            title: "Placeholder title",
-            image: user,
-            isLiked: true,
-            isFollowed: false
-          }} />
-          <ContentCard props={{
-            id: 1,
-            title: "Placeholder title",
-            image: user,
-            isLiked: true,
-            isFollowed: false
-          }} />
+          {
+            data.slice(0,8).map((item)=>{
+              return <ContentCard key={item?.id} props={{
+                id: item?.id,
+                title: item?.name,
+                image: item?.image.medium,
+                isLiked: false,
+                isFollowed: false
+              }}/>
+            })
+          }
         </ContentWrapperStyled>
       </ContentStyled>
     </Layout>

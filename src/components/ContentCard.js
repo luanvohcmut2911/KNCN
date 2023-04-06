@@ -25,7 +25,7 @@ export default function ContentCard({props}) {
     <CardStyled
       hoverable
       key={id}
-      style={{ width: 300, maxHeight: 500, overflowX: 'hidden', overflowY: 'hidden' }}
+      style={{ width: 250, maxHeight: 500, overflowX: 'hidden', overflowY: 'hidden' }}
       cover={<img src={image} alt={title} />}
       onClick={()=>{
 
