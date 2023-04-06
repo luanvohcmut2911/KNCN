@@ -1,7 +1,5 @@
-import React from 'react'
+import React from "react";
 
 export default function Actor() {
-  return (
-    <div>Actor</div>
-  )
+  return <div>Actor</div>;
 }

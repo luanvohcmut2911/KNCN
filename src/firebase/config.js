@@ -13,13 +13,11 @@ const firebaseConfig = {
   storageBucket: "film-app-remake.appspot.com",
   messagingSenderId: "1061359179537",
   appId: "1:1061359179537:web:b230a6cd6c6b4bc3d71eb0",
-  measurementId: "G-CH185Z22ZH"
+  measurementId: "G-CH185Z22ZH",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
-export {
-  app, analytics
-}
+export { app, analytics };

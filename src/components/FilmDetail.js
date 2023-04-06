@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { Row, Col, Card, Typography, List } from "antd";
 import styled from "styled-components";
 import {
@@ -10,7 +11,7 @@ import {
   faStar as unScoreStar,
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import film from "../asset/filmSample.jpg";
+import parse from "html-react-parser";
 import ContentCard from "./ContentCard";
 import CommentList from "./CommentList";
 
@@ -26,10 +27,18 @@ const CardStyled = styled(Card)`
 //   color: white;
 // `
 
-
 export default function FilmDetail({ props }) {
-  const { id, image, title, isLiked, isFollowed } = props;
-
+  const { id, isLiked, isFollowed } = props;
+  const [filmData, setFilmData] = React.useState(null);
+  const [filmCastData, setFilmCastData] = React.useState(null);
+  React.useEffect(() => {
+    axios.get(process.env.REACT_APP_API + `shows/${id}`).then((result) => {
+      setFilmData(result.data);
+    });
+    axios.get(process.env.REACT_APP_API + `shows/${id}/cast`).then((result) => {
+      setFilmCastData(result.data);
+    });
+  }, [id]);
   const [like, setLike] = React.useState(isLiked);
   const [follow, setFollow] = React.useState(isFollowed);
   const handleToggleLike = () => {
@@ -51,11 +60,11 @@ export default function FilmDetail({ props }) {
       }}
     >
       <Typography.Title level={1} style={{ color: "white" }}>
-        {title}
+        {filmData?.name}
       </Typography.Title>
       <Row>
         <Col
-          span={16}
+          span={6}
           style={{
             display: "flex",
             flexDirection: "row",
@@ -69,7 +78,7 @@ export default function FilmDetail({ props }) {
               overflowX: "hidden",
               overflowY: "hidden",
             }}
-            cover={<img src={image} alt={title} />}
+            cover={<img src={filmData?.image.medium} alt={filmData?.name} />}
             actions={[
               like ? (
                 <FontAwesomeIcon
@@ -100,36 +109,58 @@ export default function FilmDetail({ props }) {
             ]}
             bodyStyle={{ display: "none" }}
           />
-          <div>
-            <Typography style={{ color: "white" }}>
-              Dignissimos similique et aliquam cum et. Consequatur ad dolore et
-              ut et excepturi. Provident et nobis laborum possimus aut sed.
-              Blanditiis quia enim natus.
-            </Typography>
+        </Col>
+        <Col span={10}>
+          <div style={{ color: "white", paddingRight: "1rem" }}>
+            {filmData ? parse(filmData?.summary) : null}
           </div>
         </Col>
         <Col span={8}>
-          <div style={{ 
-            backgroundColor: "white",
-            height: '400px',
-            width:'400px',
-          }}>
+          <div
+            style={{
+              backgroundColor: "white",
+              height: "400px",
+              width: "400px",
+            }}
+          >
             <List
               size="small"
               bordered
               header={<Typography.Title level={3}>SHOW INFO</Typography.Title>}
               style={{
-                width: '100%',
-                height: '100%'
+                width: "100%",
+                height: "100%",
               }}
             >
-              <List.Item>Network</List.Item>
-              <List.Item>Schedule</List.Item>
-              <List.Item>Status</List.Item>
-              <List.Item>Show Typed</List.Item>
-              <List.Item>Genre</List.Item>
-              <List.Item>Official Site</List.Item>
-              <List.Item>Rating</List.Item>
+              <List.Item>
+                <b>Network: </b>
+                {filmData?.network.country.name}{" "}
+              </List.Item>
+              <List.Item>
+                <b>Schedule: </b>
+                {filmData?.schedule.days.join(" | ")} (~
+                {filmData?.averageRuntime} mins){" "}
+              </List.Item>
+              <List.Item>
+                <b>Status: </b>
+                {filmData?.status}
+              </List.Item>
+              <List.Item>
+                <b>Show Typed: </b>
+                {filmData?.type}
+              </List.Item>
+              <List.Item>
+                <b>Genre: </b>
+                {filmData?.genres?.join(" | ")}
+              </List.Item>
+              <List.Item>
+                <b>Official Site: </b>
+                {filmData?.network.officialSite}
+              </List.Item>
+              <List.Item>
+                <b>Rating: </b>
+                {filmData?.rating.average.toString()}
+              </List.Item>
             </List>
           </div>
         </Col>
@@ -143,87 +174,23 @@ export default function FilmDetail({ props }) {
           justifyContent: "space-between",
         }}
       >
-        <ContentCard
-          props={{
-            id: 1,
-            title: "Placeholder title",
-            image: film,
-            isLiked: true,
-            isFollowed: false,
-          }}
-        />
-        <ContentCard
-          props={{
-            id: 1,
-            title: "Placeholder title",
-            image: film,
-            isLiked: true,
-            isFollowed: false,
-          }}
-        />
-        <ContentCard
-          props={{
-            id: 1,
-            title: "Placeholder title",
-            image: film,
-            isLiked: true,
-            isFollowed: false,
-          }}
-        />
-        <ContentCard
-          props={{
-            id: 1,
-            title: "Placeholder title",
-            image: film,
-            isLiked: true,
-            isFollowed: false,
-          }}
-        />
-        <ContentCard
-          props={{
-            id: 1,
-            title: "Placeholder title",
-            image: film,
-            isLiked: true,
-            isFollowed: false,
-          }}
-        />
-        <ContentCard
-          props={{
-            id: 1,
-            title: "Placeholder title",
-            image: film,
-            isLiked: true,
-            isFollowed: false,
-          }}
-        />
-        <ContentCard
-          props={{
-            id: 1,
-            title: "Placeholder title",
-            image: film,
-            isLiked: true,
-            isFollowed: false,
-          }}
-        />
-        <ContentCard
-          props={{
-            id: 1,
-            title: "Placeholder title",
-            image: film,
-            isLiked: true,
-            isFollowed: false,
-          }}
-        />
-        <ContentCard
-          props={{
-            id: 1,
-            title: "Placeholder title",
-            image: film,
-            isLiked: true,
-            isFollowed: false,
-          }}
-        />
+        {filmCastData?.map((actor) => {
+          return (
+            <ContentCard
+              key={actor?.character.id}
+              props={{
+                id: actor?.character.id,
+                title: actor?.person.name,
+                description: actor?.character.name,
+                image: actor?.character.image?.medium
+                  ? actor?.character.image?.medium
+                  : actor?.person.image?.medium,
+                isLiked: true,
+                isFollowed: false,
+              }}
+            />
+          );
+        })}
       </div>
       <Typography.Title style={{ color: "white" }}>Comment</Typography.Title>
       <div>
