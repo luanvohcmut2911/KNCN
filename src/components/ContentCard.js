@@ -12,7 +12,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { createSearchParams, useNavigate } from "react-router-dom";
 import UserDefault from "../asset/user.png";
-import FilmDefault from "../asset/film.png";
+import FilmDefault from "../asset/filmSample.jpg";
+import axios from "axios";
 
 const CardStyled = styled(Card)`
   margin-bottom: 2rem;
@@ -25,25 +26,37 @@ export default function ContentCard({ props }) {
   const { id, image, title, isLiked, isFollowed, type, description } = props;
   const [like, setLike] = React.useState(isLiked);
   const [follow, setFollow] = React.useState(isFollowed);
+  const [additionalData, setAdditionalData] = React.useState(null);
   const handleToggleLike = () => {
     setLike(!like);
   };
   const handleToggleFollow = () => {
     setFollow(!follow);
   };
+  React.useEffect(()=>{
+    if(!image && !title && type==='shows'){ // handle for actor credit shows
+      axios.get(process.env.REACT_APP_API + `shows/${id}`)
+        .then((result)=>{
+          setAdditionalData(result.data);
+        })
+        .catch((err)=>{
+          console.log(err);
+        })
+    }
+  })
   return (
     <CardStyled
       hoverable
       key={id}
       style={{
         width: 250,
-        maxHeight: 500,
+        maxHeight: 550,
         overflowX: "hidden",
         overflowY: "hidden",
       }}
       cover={
         <img
-          src={image ? image : type === "shows" ? FilmDefault : UserDefault}
+          src={image ? image : (additionalData?.image.medium ? additionalData?.image.medium: type === "shows" ? FilmDefault : UserDefault)}
           alt={title}
           onClick={() => {
             navigate({
@@ -86,7 +99,7 @@ export default function ContentCard({ props }) {
       ]}
     >
       <Meta
-        title={title}
+        title={title ? title: additionalData?.name}
         description={description ? "As " + description : null}
       />
     </CardStyled>

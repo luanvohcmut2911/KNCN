@@ -122,6 +122,7 @@ export default function SideBar() {
               }
             >
               <Button
+                type="default"
                 onClick={() => {
                   navigate({
                     pathname: "/signin",
@@ -134,6 +135,7 @@ export default function SideBar() {
                 SIGN IN
               </Button>
               <Button
+                type="primary"
                 onClick={() => {
                   navigate({
                     pathname: "/signup",
@@ -161,13 +163,16 @@ export default function SideBar() {
             <UserOutlined />
           </AvatarStyled>
         </Popover>
-        <Typography
-          style={{
-            color: "white",
-          }}
-        >
-          Hello, GUEST
-        </Typography>
+        {
+          collapsed ? "":
+          <Typography
+            style={{
+              color: "white",
+            }}
+          >
+            Hello, GUEST
+          </Typography>
+        }
       </div>
       <Menu
         theme="dark"

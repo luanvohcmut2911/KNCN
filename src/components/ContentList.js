@@ -54,6 +54,7 @@ export default function ContentList(props) {
                 props={{
                   id: item?.id,
                   title: item?.name,
+                  description: null,
                   image: item?.image.medium,
                   isLiked: false,
                   isFollowed: false,

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import axios from "axios";
 import { Row, Col, Card, Typography, List } from "antd";
 import styled from "styled-components";
@@ -11,9 +11,10 @@ import {
   faStar as unScoreStar,
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import parse from "html-react-parser";
+// import parse from "html-react-parser";
 import ContentCard from "./ContentCard";
 import CommentList from "./CommentList";
+import UserDefault from "../asset/user.png";
 
 const CardStyled = styled(Card)`
   margin-bottom: 2rem;
@@ -23,22 +24,21 @@ const CardStyled = styled(Card)`
   // }
 `;
 
-// const TypographyTitleStyled = styled(Typography.Title)`
-//   color: white;
-// `
-
-export default function FilmDetail({ props }) {
-  const { id, isLiked, isFollowed } = props;
-  const [filmData, setFilmData] = React.useState(null);
-  const [filmCastData, setFilmCastData] = React.useState(null);
-  React.useEffect(() => {
-    axios.get(process.env.REACT_APP_API + `shows/${id}`).then((result) => {
-      setFilmData(result.data);
+export default function ActorDetail({props}) {
+  const {id, isLiked, isFollowed} = props;
+  const [ actorData, setActorData ] = React.useState(null);
+  const [ actorCreditData, setActorCreditData ] = React.useState(null);
+  React.useEffect(()=>{
+    axios.get(process.env.REACT_APP_API + `people/${id}`).then((result)=>{
+      setActorData(result.data);
     });
-    axios.get(process.env.REACT_APP_API + `shows/${id}/cast`).then((result) => {
-      setFilmCastData(result.data);
+    axios.get(process.env.REACT_APP_API + `people/${id}/castcredits`).then((result)=>{
+      setActorCreditData(result.data);
     });
   }, [id]);
+  console.log(actorData);
+  console.log(actorCreditData)
+
   const [like, setLike] = React.useState(isLiked);
   const [follow, setFollow] = React.useState(isFollowed);
   const handleToggleLike = () => {
@@ -47,7 +47,6 @@ export default function FilmDetail({ props }) {
   const handleToggleFollow = () => {
     setFollow(!follow);
   };
-  // breakpoint: 640
   return (
     <div
       style={{
@@ -60,7 +59,7 @@ export default function FilmDetail({ props }) {
       }}
     >
       <Typography.Title level={1} style={{ color: "white" }}>
-        {filmData?.name}
+        {actorData?.name}
       </Typography.Title>
       <Row>
         <Col
@@ -78,7 +77,7 @@ export default function FilmDetail({ props }) {
               overflowX: "hidden",
               overflowY: "hidden",
             }}
-            cover={<img src={filmData?.image.medium} alt={filmData?.name} />}
+            cover={<img src={actorData?.image?.medium ? actorData?.image?.medium: UserDefault} alt={actorData?.name} />}
             actions={[
               like ? (
                 <FontAwesomeIcon
@@ -112,60 +111,53 @@ export default function FilmDetail({ props }) {
         </Col>
         <Col span={10}>
           <Typography style={{ color: "white", paddingRight: "1rem" }}>
-            {filmData ? parse(filmData?.summary) : null}
+            We don't have a biography for {actorData?.name} yet. Hang in there, or go ahead and contribute one.
           </Typography>
         </Col>
         <Col span={8}>
-          <div
-            style={{
-              backgroundColor: "white",
-              height: "400px",
-              width: "400px",
-            }}
-          >
-            <List
-              size="small"
-              bordered
-              header={<Typography.Title level={3}>SHOW INFO</Typography.Title>}
+            <div
               style={{
-                width: "100%",
-                height: "100%",
+                backgroundColor: "white",
+                height: "400px",
+                width: "400px",
               }}
             >
-              <List.Item>
-                <b>Network: </b>
-                {filmData?.network.country.name}{" "}
-              </List.Item>
-              <List.Item>
-                <b>Schedule: </b>
-                {filmData?.schedule.days.join(" | ")} (~
-                {filmData?.averageRuntime} mins){" "}
-              </List.Item>
-              <List.Item>
-                <b>Status: </b>
-                {filmData?.status}
-              </List.Item>
-              <List.Item>
-                <b>Show Typed: </b>
-                {filmData?.type}
-              </List.Item>
-              <List.Item>
-                <b>Genre: </b>
-                {filmData?.genres?.join(" | ")}
-              </List.Item>
-              <List.Item>
-                <b>Official Site: </b>
-                {filmData?.network.officialSite}
-              </List.Item>
-              <List.Item>
-                <b>Rating: </b>
-                {filmData?.rating.average.toString()}
-              </List.Item>
-            </List>
-          </div>
+              <List
+                size="small"
+                bordered
+                header={<Typography.Title level={3}>SHOW INFO</Typography.Title>}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
+              >
+                <List.Item>
+                  <b>Nationality: </b>
+                  {actorData?.country?.name ? actorData.country.name: 'Unknown'}
+                </List.Item>
+                <List.Item>
+                  <b>Birthday: </b>
+                  {actorData?.birthday ? actorData?.birthday : 'Unknown'}
+                </List.Item>
+                <List.Item>
+                  <b>Age: </b>
+                  {actorData?.birthday ? (2023 - actorData?.birthday.split('-')[0]).toString(): 'NaN'}
+                </List.Item>
+                {
+                  actorData?.deathday ? <List.Item>
+                  <b>Deathday: </b>
+                  {actorData?.deathday}
+                </List.Item>: null
+                }
+                <List.Item>
+                  <b>Gender: </b>
+                  {actorData?.gender}
+                </List.Item>
+              </List>
+            </div>
         </Col>
       </Row>
-      <Typography.Title style={{ color: "white" }}>Cast</Typography.Title>
+      <Typography.Title style={{ color: "white" }}>Credits</Typography.Title>
       <div
         style={{
           display: "flex",
@@ -174,29 +166,27 @@ export default function FilmDetail({ props }) {
           justifyContent: "space-between",
         }}
       >
-        {filmCastData?.map((actor) => {
-          return (
-            <ContentCard
-              key={actor?.character.id}
-              props={{
-                id: actor?.character.id,
-                title: actor?.person.name,
-                description: actor?.character.name,
-                image: actor?.character.image?.medium
-                  ? actor?.character.image?.medium
-                  : actor?.person.image?.medium,
-                isLiked: true,
-                isFollowed: false,
-                type: 'actor'
-              }}
-            />
-          );
-        })}
+        {
+          actorCreditData?.map((credit)=>{
+            console.log(credit._links.show.href.split('/').slice(-1)[0]);
+            const idFilm = credit?._links.show.href.split('/').slice(-1)[0];
+            
+            return (
+              <ContentCard 
+                key={idFilm}
+                props={{
+                  id: idFilm,//credit?.character.id,
+                  type: 'shows'
+                }}
+              />
+            )
+          })
+        }
       </div>
       <Typography.Title style={{ color: "white" }}>Comment</Typography.Title>
       <div>
         <CommentList />
       </div>
     </div>
-  );
+  )
 }

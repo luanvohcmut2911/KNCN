@@ -3,6 +3,7 @@ import { Button, Form, Input, Typography } from 'antd';
 import {UserOutlined, LockOutlined, MailOutlined} from '@ant-design/icons';
 import styled from 'styled-components';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { createNewUser } from '../authentication/emailProvider';
 
 const WrapperStyled = styled.div`
   display: flex;
@@ -36,6 +37,9 @@ export default function SignUp() {
 
   const onFinish= (value)=>{
     console.log(value);
+    if(value.password === value.passwordConfirm) {
+      createNewUser(value.email, value.password);
+    }
   };
 
   return (
@@ -92,7 +96,7 @@ export default function SignUp() {
           </Form.Item>
           <Form.Item
             label={<Typography.Text strong>Re-enter password:</Typography.Text>}
-            name="password-re-enter"
+            name="passwordConfirm"
             rules={[
               { required: true, message: "Please input your password!" },
             ]}

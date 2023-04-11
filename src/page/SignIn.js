@@ -3,6 +3,8 @@ import { Button, Form, Input, Typography } from 'antd';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import styled from 'styled-components';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { handleGoogleLogin } from '../authentication/googleProvider';
+import { handleEmailLogin } from '../authentication/emailProvider';
 
 const WrapperStyled = styled.div`
   display: flex;
@@ -34,8 +36,9 @@ export default function SignIn() {
     }
   }, [query, navigate]);
 
-  const onFinish= ()=>{
-
+  const onFinish= (value)=>{
+    console.log(value);
+    handleEmailLogin(value.email, value.password);
   };
 
   return (
@@ -101,9 +104,8 @@ export default function SignIn() {
                   display: "flex",
                   alignItems: "center",
                   float: "right",
-                  backgroundColor: "#10393B",
+                  // backgroundColor: "#10393B",
                 }}
-                // onClick={handleEmailLogin}
               >
                 <Typography.Text
                   style={{
@@ -112,29 +114,6 @@ export default function SignIn() {
                   }}
                 >
                   Continue
-                </Typography.Text>
-              </Button>
-              <Button
-                type="primary"
-                htmlType="submit"
-                style={{
-                  borderRadius: "50px",
-                  padding: "24px",
-                  display: "flex",
-                  alignItems: "center",
-                  float: "right",
-                  backgroundColor: "white",
-                  borderColor: "#10393B",
-                  marginRight: "1rem",
-                }}
-              >
-                <Typography.Text
-                  style={{
-                    color: "#10393B",
-                    fontSize: "20px",
-                  }}
-                >
-                  Return
                 </Typography.Text>
               </Button>
             </div>
@@ -170,9 +149,7 @@ export default function SignIn() {
                 alignItems: "center",
                 justifyContent: "center",
               }}
-              onClick={() => {
-                // handleGoogleLogin(googleProvider);
-              }}
+              onClick={handleGoogleLogin}
             >
               {/* <GoogleIcon /> */}
               <Typography.Text
