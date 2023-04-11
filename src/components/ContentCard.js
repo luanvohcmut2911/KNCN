@@ -56,7 +56,7 @@ export default function ContentCard({ props }) {
       }}
       cover={
         <img
-          src={image ? image : (additionalData?.image.medium ? additionalData?.image.medium: type === "shows" ? FilmDefault : UserDefault)}
+          src={image ? image : (additionalData?.image?.medium ? additionalData?.image?.medium: type === "shows" ? FilmDefault : UserDefault)}
           alt={title}
           onClick={() => {
             navigate({
