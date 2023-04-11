@@ -113,7 +113,7 @@ export default function FilmDetail({ props }) {
         </Col>
         <Col span={10}>
           <Typography style={{ color: "white", paddingRight: "1rem" }}>
-            {filmData ? parse(filmData?.summary) : null}
+            {filmData?.summary ? parse(filmData?.summary) : null}
           </Typography>
         </Col>
         <Col span={8}>
