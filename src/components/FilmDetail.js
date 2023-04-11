@@ -79,7 +79,7 @@ export default function FilmDetail({ props }) {
               overflowX: "hidden",
               overflowY: "hidden",
             }}
-            cover={<img src={filmData?.image.medium} alt={filmData?.name} />}
+            cover={<img src={filmData?.image?.medium} alt={filmData?.name} />}
             actions={[
               like ? (
                 <FontAwesomeIcon
