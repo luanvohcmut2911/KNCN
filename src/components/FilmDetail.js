@@ -178,9 +178,9 @@ export default function FilmDetail({ props }) {
         {filmCastData?.map((actor) => {
           return (
             <ContentCard
-              key={actor?.character.id}
+              key={actor?.person.id}
               props={{
-                id: actor?.character.id,
+                id: actor?.person.id,
                 title: actor?.person.name,
                 description: actor?.character.name,
                 image: actor?.character.image?.medium
