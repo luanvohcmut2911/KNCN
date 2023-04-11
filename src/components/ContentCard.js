@@ -10,7 +10,7 @@ import {
   faStar as unScoreStar,
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate } from "react-router-dom";
+import { createSearchParams, useNavigate } from "react-router-dom";
 import UserDefault from "../asset/user.png";
 import FilmDefault from "../asset/film.png";
 
@@ -46,7 +46,13 @@ export default function ContentCard({ props }) {
           src={image ? image : type === "shows" ? FilmDefault : UserDefault}
           alt={title}
           onClick={() => {
-            navigate(`/${type === "shows" ? "film" : "actor"}/${id}/${title}`);
+            navigate({
+              pathname: `/${type === "shows" ? "film" : "actor"}/${id}/${title}`,
+              search: `?${createSearchParams({
+                ref: `nv_content-card->detail`,
+                id: id
+              })}`
+            })
           }}
         />
       }
