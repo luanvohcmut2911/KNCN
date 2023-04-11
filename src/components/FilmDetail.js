@@ -39,6 +39,7 @@ export default function FilmDetail({ props }) {
       setFilmCastData(result.data);
     });
   }, [id]);
+  // console.log(filmData)
   const [like, setLike] = React.useState(isLiked);
   const [follow, setFollow] = React.useState(isFollowed);
   const handleToggleLike = () => {
@@ -134,7 +135,7 @@ export default function FilmDetail({ props }) {
             >
               <List.Item>
                 <b>Network: </b>
-                {filmData?.network.country.name}{" "}
+                {filmData?.network?.country?.name}{" "}
               </List.Item>
               <List.Item>
                 <b>Schedule: </b>
@@ -155,7 +156,7 @@ export default function FilmDetail({ props }) {
               </List.Item>
               <List.Item>
                 <b>Official Site: </b>
-                {filmData?.network.officialSite}
+                {filmData?.network?.officialSite || filmData?.officialSite}
               </List.Item>
               <List.Item>
                 <b>Rating: </b>

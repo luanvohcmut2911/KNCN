@@ -133,7 +133,7 @@ export default function ActorDetail({props}) {
               >
                 <List.Item>
                   <b>Nationality: </b>
-                  {actorData?.country?.name ? actorData.country.name: 'Unknown'}
+                  {actorData?.country?.name ? actorData?.country?.name: 'Unknown'}
                 </List.Item>
                 <List.Item>
                   <b>Birthday: </b>
