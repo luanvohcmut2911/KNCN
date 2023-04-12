@@ -1,9 +1,10 @@
-import React from 'react'
-import { Button, Form, Input, Typography } from 'antd';
-import {UserOutlined, LockOutlined, MailOutlined} from '@ant-design/icons';
-import styled from 'styled-components';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import { createNewUser } from '../authentication/emailProvider';
+import React from "react";
+import { Button, Form, Input, Typography } from "antd";
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
+import styled from "styled-components";
+import { useSearchParams, useNavigate, createSearchParams } from "react-router-dom";
+import { createNewUser } from "../authentication/emailProvider";
+import { handleGoogleLogin } from "../authentication/googleProvider";
 
 const WrapperStyled = styled.div`
   display: flex;
@@ -12,7 +13,7 @@ const WrapperStyled = styled.div`
   height: 100%;
   justify-content: center;
   align-items: center;
-`
+`;
 const InputStyled = styled(Input)`
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -26,7 +27,6 @@ const InputPasswordStyled = styled(Input.Password)`
 `;
 
 export default function SignUp() {
-
   const [query] = useSearchParams();
   const navigate = useNavigate();
   React.useEffect(() => {
@@ -35,179 +35,165 @@ export default function SignUp() {
     }
   }, [query, navigate]);
 
-  const onFinish= (value)=>{
+  const onFinish = (value) => {
     console.log(value);
-    if(value.password === value.passwordConfirm) {
-      createNewUser(value.email, value.password);
+    if (value.password === value.passwordConfirm) {
+      createNewUser(value.email, value.password).then((res)=>{
+        navigate({
+          pathname: '/create-new-user',
+          search: `${createSearchParams({
+            ref: 'nv_create_username',
+            id_token: JSON.parse(window.sessionStorage.getItem('user')).uid
+          })}`
+        })
+      })
     }
   };
 
   return (
     <WrapperStyled>
       <Form
-          name="normal-login"
+        name="normal-login"
+        style={{
+          width: "500px",
+          backgroundColor: "white",
+          padding: "1rem 2.5rem 1rem 2.5rem",
+          borderRadius: "24px",
+        }}
+        layout="vertical"
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+      >
+        <Typography.Title style={{ marginBottom: 0 }}>Sign up</Typography.Title>
+        <Form.Item
+          label={<Typography.Text strong>Email:</Typography.Text>}
+          name="email"
+          rules={[{ required: true, message: "Please enter your email! " }]}
           style={{
-            width: "500px",
-            backgroundColor: "white",
-            padding: "1rem 2.5rem 1rem 2.5rem",
-            borderRadius: "24px",
+            paddingTop: "1.5rem",
           }}
-          layout="vertical"
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
         >
-          <Typography.Title style={{ marginBottom: 0 }}>
-            Sign up
-          </Typography.Title>
-          <Form.Item
-            label={<Typography.Text strong>Email:</Typography.Text>}
-            name="email"
-            rules={[{ required: true, message: "Please enter your email! " }]}
-            style={{
-              paddingTop: "1.5rem",
-            }}
-          >
-            <InputStyled
-              prefix={<MailOutlined className="site-form-item-icon" />}
-              placeholder="abc@gmail.com"
-            />
-          </Form.Item>
-          <Form.Item
-            label={<Typography.Text strong>Username:</Typography.Text>}
-            name="username"
-            rules={[{ required: true, message: "Please enter your username! " }]}
-          >
-            <InputStyled
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              placeholder="Your username"
-            />
-          </Form.Item>
-          <Form.Item
-            label={<Typography.Text strong>Password:</Typography.Text>}
-            name="password"
-            rules={[
-              { required: true, message: "Please input your password!" },
-            ]}
-          >
-            <InputPasswordStyled
-              prefix={<LockOutlined className="site-form-item-icon" />}
-              placeholder="Password"
-            />
-          </Form.Item>
-          <Form.Item
-            label={<Typography.Text strong>Re-enter password:</Typography.Text>}
-            name="passwordConfirm"
-            rules={[
-              { required: true, message: "Please input your password!" },
-            ]}
-          >
-            <InputPasswordStyled
-              prefix={<LockOutlined className="site-form-item-icon" />}
-              placeholder="Password"
-            />
-          </Form.Item>
+          <InputStyled
+            prefix={<MailOutlined className="site-form-item-icon" />}
+            placeholder="abc@gmail.com"
+          />
+        </Form.Item>
+        <Form.Item
+          label={<Typography.Text strong>Password:</Typography.Text>}
+          name="password"
+          rules={[{ required: true, message: "Please input your password!" }]}
+        >
+          <InputPasswordStyled
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            placeholder="Password"
+          />
+        </Form.Item>
+        <Form.Item
+          label={<Typography.Text strong>Re-enter password:</Typography.Text>}
+          name="passwordConfirm"
+          rules={[{ required: true, message: "Please input your password!" }]}
+        >
+          <InputPasswordStyled
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            placeholder="Password"
+          />
+        </Form.Item>
 
-          <Form.Item
-            style={{
-              position: "relative",
-            }}
-          >
-            <div>
-              <Button
-                type="primary"
-                htmlType="submit"
-                style={{
-                  borderRadius: "50px",
-                  padding: "24px",
-                  display: "flex",
-                  alignItems: "center",
-                  float: "right",
-                  // backgroundColor: "#10393B",
-                }}
-                // onClick={handleEmailLogin}
-              >
-                <Typography.Text
-                  style={{
-                    color: "white",
-                    fontSize: "20px",
-                  }}
-                >
-                  Continue
-                </Typography.Text>
-              </Button>
-              {/* <Button
-                type="primary"
-                htmlType="submit"
-                style={{
-                  borderRadius: "50px",
-                  padding: "24px",
-                  display: "flex",
-                  alignItems: "center",
-                  float: "right",
-                  backgroundColor: "white",
-                  borderColor: "#10393B",
-                  marginRight: "1rem",
-                }}
-              >
-                <Typography.Text
-                  style={{
-                    color: "#10393B",
-                    fontSize: "20px",
-                  }}
-                >
-                  Return
-                </Typography.Text>
-              </Button> */}
-            </div>
-            <div
-              style={{
-                width: "100%",
-                height: "20px",
-                borderBottom: "1px solid black",
-                textAlign: "center",
-                clear: "right",
-                paddingTop: "1rem",
-                marginBottom: "2rem",
-                padding: 0,
-              }}
-            >
-              <span
-                style={{
-                  fontSize: "20px",
-                  backgroundColor: "#F3F5F6",
-                  padding: "0 10px",
-                }}
-              >
-                Or
-              </span>
-            </div>
+        <Form.Item
+          style={{
+            position: "relative",
+          }}
+        >
+          <div>
             <Button
-              type="default"
+              type="primary"
+              htmlType="submit"
               style={{
-                width: "100%",
                 borderRadius: "50px",
                 padding: "24px",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
-              }}
-              onClick={() => {
-                // handleGoogleLogin(googleProvider);
+                float: "right",
+                // backgroundColor: "#10393B",
               }}
             >
-              {/* <GoogleIcon /> */}
               <Typography.Text
-                strong
                 style={{
+                  color: "white",
                   fontSize: "20px",
-                  marginLeft: "1rem",
                 }}
               >
-                Continue with Google
+                Continue
               </Typography.Text>
             </Button>
-          </Form.Item>
-        </Form>
+          </div>
+          <div
+            style={{
+              width: "100%",
+              height: "20px",
+              borderBottom: "1px solid black",
+              textAlign: "center",
+              clear: "right",
+              paddingTop: "1rem",
+              marginBottom: "2rem",
+              padding: 0,
+            }}
+          >
+            <span
+              style={{
+                fontSize: "20px",
+                backgroundColor: "#F3F5F6",
+                padding: "0 10px",
+              }}
+            >
+              Or
+            </span>
+          </div>
+          <Button
+            type="default"
+            style={{
+              width: "100%",
+              borderRadius: "50px",
+              padding: "24px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onClick={() => {
+              handleGoogleLogin().then((res)=>{
+                if(res.isVerified){
+                  if(res.isNewUser){
+                    navigate({
+                      pathname: '/create-new-user',
+                      search: `${createSearchParams({
+                        ref: 'nv_create_username',
+                        id_token: JSON.parse(window.sessionStorage.getItem('user')).uid
+                      })}`
+                    })
+                  }
+                  else navigate({
+                    pathname: '/',
+                    search: `${createSearchParams({
+                      ref: 'nv_home'
+                    })}`
+                  })
+                }
+              });
+            }}
+          >
+            {/* <GoogleIcon /> */}
+            <Typography.Text
+              strong
+              style={{
+                fontSize: "20px",
+                marginLeft: "1rem",
+              }}
+            >
+              Continue with Google
+            </Typography.Text>
+          </Button>
+        </Form.Item>
+      </Form>
     </WrapperStyled>
-  )
+  );
 }

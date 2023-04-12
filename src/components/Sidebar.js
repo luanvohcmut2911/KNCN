@@ -7,12 +7,14 @@ import {
   faFilm,
   faHouse,
   faCircleUser,
-  // faRightFromBracket,
+  faRightFromBracket,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { AuthContext } from "../Context/AuthProvider";
+// import { AuthContext } from "../Context/AuthProvider";
 import { useNavigate, useLocation, createSearchParams } from "react-router-dom";
+import { handleSignOut } from "../authentication/signOut";
+import { getUser } from "../firebase/method";
 
 const SideBarStyled = styled.div``;
 
@@ -27,20 +29,39 @@ const SideBarStyled = styled.div``;
 const AvatarStyled = styled(Avatar)`
   background-color: white;
   color: black;
-  &:hover {
-    cursor: pointer;
-  }
+  // &:hover {
+  //   cursor: pointer;
+  // }
 `;
 
 export default function SideBar() {
-  const { user } = React.useContext(AuthContext);
+  // const { user } = React.useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
   const { Sider } = Layout;
   const [collapsed, setCollapsed] = React.useState(false);
+  let profileUser = JSON.parse(window.sessionStorage.getItem('user'));
+  // console.log(profileUser);
+  const [ username, setUsername ] = React.useState(null);
+  React.useEffect(()=>{
+    if(profileUser){
+      getUser('users', {
+        fieldName: 'token',
+        operator: '==',
+        compareValue: profileUser?.uid
+      }).then((docSnap)=>{
+        console.log(docSnap);
+        docSnap.forEach((doc)=>{
+          console.log(doc);
+          setUsername(doc.data().username);
+        })
+        // setUsername(docSnap[0].data().username);
+      })
+    }
+  }, [profileUser]);
   const handleSelect = (selector) => {
     if (selector.key === "account") {
-      if (!user) {
+      if (!profileUser) {
         navigate({
           pathname: '/registration',
           search: `${createSearchParams({
@@ -50,7 +71,17 @@ export default function SideBar() {
       } else {
         // get user id
       }
-    } else {
+    } 
+    else if(selector.key==="logout"){
+      handleSignOut().then((isSuccess)=>{
+        if(isSuccess) {
+          window.sessionStorage.clear();
+          setUsername(null);
+          navigate('/');
+        }
+      })
+    }
+    else {
       navigate({
         pathname: `/${selector.key}`,
         search: `${createSearchParams({
@@ -80,18 +111,18 @@ export default function SideBar() {
       key: "search",
       icon: <FontAwesomeIcon icon={faMagnifyingGlass} />,
     },
-    {
+    !profileUser?{
       label: "Registration",
       key: "registration",
       icon: <FontAwesomeIcon icon={faCircleUser} />,
-    },
-    // user
-    //   ? {
-    //       label: "Log Out",
-    //       key: "Logout",
-    //       icon: <FontAwesomeIcon icon={faRightFromBracket} />,
-    //     }
-    //   : null,
+    }: null,
+    profileUser
+      ? {
+          label: "Log Out",
+          key: "logout",
+          icon: <FontAwesomeIcon icon={faRightFromBracket} />,
+        }
+      : null,
   ];
   return (
     <Sider
@@ -112,8 +143,8 @@ export default function SideBar() {
           justifyContent: "center",
         }}
       >
-        <AvatarStyled>
-          <UserOutlined />
+        <AvatarStyled icon={!profileUser || !profileUser?.avatar ? <UserOutlined />: <img src={profileUser?.avatar} alt='avatar' />}>
+          
         </AvatarStyled>
         {
           collapsed ? "":
@@ -122,7 +153,7 @@ export default function SideBar() {
               color: "white",
             }}
           >
-            Hello, GUEST
+            Hello, {!username ? 'GUEST' : username}
           </Typography>
         }
       </div>

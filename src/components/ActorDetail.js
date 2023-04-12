@@ -173,9 +173,8 @@ export default function ActorDetail({props}) {
       >
         {
           actorCreditData?.map((credit)=>{
-            console.log(credit._links.show.href.split('/').slice(-1)[0]);
-            const idFilm = credit?._links.show.href.split('/').slice(-1)[0];
-            
+            // console.log(credit._links.show.href.split('/').slice(-1)[0]);
+            const idFilm = credit?._links.show.href.split('/').slice(-1)[0]; 
             return (
               <ContentCard 
                 key={idFilm}

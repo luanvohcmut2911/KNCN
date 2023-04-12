@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Form, Input, Typography } from 'antd';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import styled from 'styled-components';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate, createSearchParams } from 'react-router-dom';
 import { handleGoogleLogin } from '../authentication/googleProvider';
 import { handleEmailLogin } from '../authentication/emailProvider';
 
@@ -37,8 +37,17 @@ export default function SignIn() {
   }, [query, navigate]);
 
   const onFinish= (value)=>{
-    console.log(value);
-    handleEmailLogin(value.email, value.password);
+    handleEmailLogin(value.email, value.password).then((res)=>{
+      console.log(res);
+      if(res.isVerified){
+        navigate({
+          pathname: '/',
+          search: `${createSearchParams({
+            ref: 'nv_home'
+          })}`
+        });
+      }
+    });
   };
 
   return (
@@ -58,11 +67,20 @@ export default function SignIn() {
           <Typography.Title style={{ marginBottom: 0 }}>
             Sign in
           </Typography.Title>
-          <Typography.Text>
-            New user?{" "}
-            <a href="/signup?ref=nv_signup" style={{ textDecoration: "underline" }}>
+          <Typography.Text style={{
+            display: 'flex'
+          }}>
+            New user?{""}
+            <div onClick={()=>{
+              navigate({
+                pathname: '/signup',
+                search: `${createSearchParams({
+                  ref: 'nv_signup'
+                })}`
+              })
+            }} style={{ textDecoration: "underline", cursor: 'pointer' }}>
               Create new account
-            </a>
+            </div>
           </Typography.Text>
           <Form.Item
             label={<Typography.Text strong>Email:</Typography.Text>}
@@ -149,7 +167,27 @@ export default function SignIn() {
                 alignItems: "center",
                 justifyContent: "center",
               }}
-              onClick={handleGoogleLogin}
+              onClick={()=>{
+                handleGoogleLogin().then((res)=>{
+                  if(res.isVerified){
+                    if(res.isNewUser){
+                      navigate({
+                        pathname: '/create-new-user',
+                        search: `${createSearchParams({
+                          ref: 'nv_create_username',
+                          id_token: JSON.parse(window.sessionStorage.getItem('user')).uid
+                        })}`
+                      })
+                    }
+                    else navigate({
+                      pathname: '/',
+                      search: `${createSearchParams({
+                        ref: 'nv_home'
+                      })}`
+                    })
+                  }
+                });
+              }}
             >
               {/* <GoogleIcon /> */}
               <Typography.Text

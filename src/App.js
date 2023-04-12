@@ -12,10 +12,14 @@ import SignUp from "./page/SignUp";
 import Search from "./page/Search";
 import Registration from "./page/Registration";
 import AuthProvider from "./Context/AuthProvider";
+import UsernameSignUp from "./page/UsernameSignUp";
 import SideBar from './components/SideBar';
 import { Layout } from "antd";
 
 function App() {
+  // window.onbeforeunload = ()=>{
+  //   sessionStorage.clear();
+  // }
   return (
     <div className="App">
       <AuthProvider>
@@ -30,6 +34,7 @@ function App() {
               <Route path="/actor" element={<ActorList />} />
               <Route path="/actor/:id" element={<Actor />} />
               <Route path="/registration" element={<Registration />} />
+              <Route path="/create-new-user" element={<UsernameSignUp />} />
               <Route path="/signin" element={<SignIn />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/search" element={<Search />} />

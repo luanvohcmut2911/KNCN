@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Row, Col, Typography } from "antd";
 import { useNavigate, createSearchParams, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
+import { handleGoogleLogin } from "../authentication/googleProvider";
 
 const WrapperStyled = styled.div`
   width: 100%;
@@ -50,8 +51,26 @@ export default function Registration() {
               });
             }}> Sign in with Review App </ButtonStyled>
             <ButtonStyled onClick={()=>{
-              alert('Google log in');
-            }}> Sign in with Google </ButtonStyled>
+                handleGoogleLogin().then((res)=>{
+                  if(res.isVerified){
+                    if(res.isNewUser){
+                      navigate({
+                        pathname: '/create-new-user',
+                        search: `${createSearchParams({
+                          ref: 'nv_create_username',
+                          id_token: JSON.parse(window.sessionStorage.getItem('user')).uid
+                        })}`
+                      })
+                    }
+                    else navigate({
+                      pathname: '/',
+                      search: `${createSearchParams({
+                        ref: 'nv_home'
+                      })}`
+                    })
+                  }
+                });
+              }}> Sign in with Google </ButtonStyled>
           </div>
           <div
             style={{
