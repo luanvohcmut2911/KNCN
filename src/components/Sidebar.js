@@ -1,12 +1,12 @@
 import React from "react";
-import { Layout, Menu, Typography, Avatar, Popover, Button } from "antd";
+import { Layout, Menu, Typography, Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import {
   faUser,
   faFilm,
   faHouse,
-  // faCircleUser,
+  faCircleUser,
   // faRightFromBracket,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
@@ -80,11 +80,11 @@ export default function SideBar() {
       key: "search",
       icon: <FontAwesomeIcon icon={faMagnifyingGlass} />,
     },
-    // {
-    //   label: "Account",
-    //   key: "account",
-    //   icon: <FontAwesomeIcon icon={faCircleUser} />,
-    // },
+    {
+      label: "Registration",
+      key: "registration",
+      icon: <FontAwesomeIcon icon={faCircleUser} />,
+    },
     // user
     //   ? {
     //       label: "Log Out",
@@ -112,57 +112,9 @@ export default function SideBar() {
           justifyContent: "center",
         }}
       >
-        <Popover
-          content={
-            <div
-              style={
-                {
-                  // display: 'flex'
-                }
-              }
-            >
-              <Button
-                type="default"
-                onClick={() => {
-                  navigate({
-                    pathname: "/signin",
-                    search: `${createSearchParams({
-                      ref: 'nv_home->signin'
-                    })}`
-                  });
-                }}
-              >
-                SIGN IN
-              </Button>
-              <Button
-                type="primary"
-                onClick={() => {
-                  navigate({
-                    pathname: "/signup",
-                    search: `${createSearchParams({
-                      ref: 'nv_home->signup'
-                    })}`
-                  });
-                }}
-              >
-                Create new account
-              </Button>
-            </div>
-          }
-          trigger="hover"
-          onClick={() => {
-            navigate({
-              pathname: "/registration",
-              search: `${createSearchParams({
-                ref: 'nv_home->registration'
-              })}`
-            });
-          }}
-        >
-          <AvatarStyled>
-            <UserOutlined />
-          </AvatarStyled>
-        </Popover>
+        <AvatarStyled>
+          <UserOutlined />
+        </AvatarStyled>
         {
           collapsed ? "":
           <Typography

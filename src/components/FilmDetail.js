@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import parse from "html-react-parser";
 import ContentCard from "./ContentCard";
 import CommentList from "./CommentList";
+import Loading from "./Loading";
 
 const CardStyled = styled(Card)`
   margin-bottom: 2rem;
@@ -31,6 +32,7 @@ export default function FilmDetail({ props }) {
   const { id, isLiked, isFollowed } = props;
   const [filmData, setFilmData] = React.useState(null);
   const [filmCastData, setFilmCastData] = React.useState(null);
+  const [disappear, setDisappear] = React.useState(true);
   React.useEffect(() => {
     axios.get(process.env.REACT_APP_API + `shows/${id}`).then((result) => {
       setFilmData(result.data);
@@ -48,6 +50,9 @@ export default function FilmDetail({ props }) {
   const handleToggleFollow = () => {
     setFollow(!follow);
   };
+  setTimeout(()=>{
+    setDisappear(false);
+  }, 3000);
   // breakpoint: 640
   return (
     <div
@@ -60,6 +65,9 @@ export default function FilmDetail({ props }) {
         // flexDirection: 'row'
       }}
     >
+      <Loading props={{
+        disappear: disappear
+      }} />
       <Typography.Title level={1} style={{ color: "white" }}>
         {filmData?.name}
       </Typography.Title>
@@ -160,7 +168,7 @@ export default function FilmDetail({ props }) {
               </List.Item>
               <List.Item>
                 <b>Rating: </b>
-                {filmData?.rating.average.toString()}
+                {filmData?.rating?.average ? filmData?.rating?.average.toString() : 'NaN'}
               </List.Item>
             </List>
           </div>

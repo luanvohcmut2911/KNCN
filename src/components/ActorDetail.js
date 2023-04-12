@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ContentCard from "./ContentCard";
 import CommentList from "./CommentList";
 import UserDefault from "../asset/user.png";
+import Loading from './Loading';
 
 const CardStyled = styled(Card)`
   margin-bottom: 2rem;
@@ -28,6 +29,7 @@ export default function ActorDetail({props}) {
   const {id, isLiked, isFollowed} = props;
   const [ actorData, setActorData ] = React.useState(null);
   const [ actorCreditData, setActorCreditData ] = React.useState(null);
+  const [disappear, setDisappear] = React.useState(true);
   React.useEffect(()=>{
     axios.get(process.env.REACT_APP_API + `people/${id}`).then((result)=>{
       setActorData(result.data);
@@ -36,9 +38,9 @@ export default function ActorDetail({props}) {
       setActorCreditData(result.data);
     });
   }, [id]);
-  console.log(actorData);
-  console.log(actorCreditData)
-
+  setTimeout(()=>{
+    setDisappear(false);
+  }, 3000);
   const [like, setLike] = React.useState(isLiked);
   const [follow, setFollow] = React.useState(isFollowed);
   const handleToggleLike = () => {
@@ -58,6 +60,9 @@ export default function ActorDetail({props}) {
         // flexDirection: 'row'
       }}
     >
+      <Loading props={{
+        disappear: disappear
+      }} />
       <Typography.Title level={1} style={{ color: "white" }}>
         {actorData?.name}
       </Typography.Title>

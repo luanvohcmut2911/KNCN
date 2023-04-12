@@ -12,9 +12,10 @@ export default function ActorList() {
       navigate("/404-Not-Found");
     }
   }, [query, navigate]);
+
+
   return (
     <Layout style={{ height: "100vh" }}>
-      {/* <SideBar /> */}
       <ContentList type="people" />
     </Layout>
   );

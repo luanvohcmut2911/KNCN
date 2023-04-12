@@ -43,7 +43,7 @@ export default function ContentCard({ props }) {
           console.log(err);
         })
     }
-  })
+  }, [id, image, title, type]);
   return (
     <CardStyled
       hoverable
@@ -60,10 +60,11 @@ export default function ContentCard({ props }) {
           alt={title}
           onClick={() => {
             navigate({
-              pathname: `/${type === "shows" ? "film" : "actor"}/${id}/${title}`,
+              pathname: `/${type === "shows" ? "film" : "actor"}/${id}`,
               search: `?${createSearchParams({
                 ref: `nv_content-card->detail`,
-                id: id
+                id: id,
+                title: title ? title: additionalData?.name
               })}`
             })
           }}

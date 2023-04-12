@@ -3,6 +3,7 @@ import ContentCard from "./ContentCard";
 import { Layout, Breadcrumb } from "antd";
 import styled from "styled-components";
 import axios from "axios";
+import Loading from "./Loading";
 
 const ContentWrapperStyled = styled.div`
   display: flex;
@@ -24,7 +25,7 @@ const ContentStyled = styled(Content)`
 export default function ContentList(props) {
   const [data, setData] = React.useState([]);
   const { type } = props;
-
+  const [disappear, setDisappear] = React.useState(true);
   React.useEffect(() => {
     axios.get(process.env.REACT_APP_API + type).then((result) => {
       console.log(result.data);
@@ -32,8 +33,15 @@ export default function ContentList(props) {
     });
   }, [type]);
 
+  setTimeout(()=>{
+    setDisappear(false);
+  }, 3000);
+
   return (
-    <Layout style={{ backgroundColor: "black" }}>
+    <Layout.Content style={{ backgroundColor: "black" }}>
+      <Loading props={{
+        disappear: disappear
+      }} />
       <ContentStyled>
         <Breadcrumb
           style={{ margin: "16px 0" }}
@@ -65,6 +73,6 @@ export default function ContentList(props) {
           })}
         </ContentWrapperStyled>
       </ContentStyled>
-    </Layout>
+    </Layout.Content>
   );
 }
