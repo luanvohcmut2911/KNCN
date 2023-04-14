@@ -75,7 +75,7 @@ export default function CommentList() {
       <Comment
         avatar={
           <Avatar
-            icon={currentUser?.avatar ? currentUser?.avatar: <UserOutlined />}
+            icon={currentUser?.avatar ? <img src={currentUser?.avatar} alt={username} />: <UserOutlined />}
             alt={username}
           />
         }
