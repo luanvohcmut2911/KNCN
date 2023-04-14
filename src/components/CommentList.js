@@ -24,6 +24,11 @@ export default function CommentList() {
     });
   };
   const handleSubmit = (e) => {
+    if(!currentUser){
+      alert('you must sign in to comment');
+      return ;
+    }
+
     if (!state.value) {
       return;
     }
@@ -70,7 +75,7 @@ export default function CommentList() {
       <Comment
         avatar={
           <Avatar
-            src={currentUser?.avatar ? currentUser?.avatar: <UserOutlined />}
+            icon={currentUser?.avatar ? currentUser?.avatar: <UserOutlined />}
             alt={username}
           />
         }
