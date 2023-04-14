@@ -1,5 +1,6 @@
 import React from "react";
 import { Form, Input, Button, Avatar, List } from "antd";
+import { UserOutlined } from '@ant-design/icons';
 import { Comment } from "@ant-design/compatible";
 import CommentCard from "./CommentCard";
 import moment from "moment";
@@ -14,6 +15,8 @@ const initValue = {
 
 export default function CommentList() {
   const [state, setState] = React.useState(initValue);
+  const currentUser = JSON.parse(sessionStorage.getItem('user'));
+  const username = (sessionStorage.getItem('username'));
   const handleChange = (e) => {
     setState({
       ...state,
@@ -35,9 +38,9 @@ export default function CommentList() {
         ...state,
         comments: [
           {
-            author: "Han Solo",
+            author: username,
             avatar:
-              "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
+              currentUser?.avatar ? currentUser?.avatar: <UserOutlined />,
             content: <p>{state.value}</p>,
             datetime: moment().fromNow(),
           },
@@ -67,8 +70,8 @@ export default function CommentList() {
       <Comment
         avatar={
           <Avatar
-            src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-            alt="Han Solo"
+            src={currentUser?.avatar ? currentUser?.avatar: <UserOutlined />}
+            alt={username}
           />
         }
         content={

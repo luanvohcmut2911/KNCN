@@ -54,6 +54,7 @@ export default function SideBar() {
         docSnap.forEach((doc)=>{
           console.log(doc);
           setUsername(doc.data().username);
+          window.sessionStorage.setItem('username', doc.data().username);
         })
         // setUsername(docSnap[0].data().username);
       })
@@ -143,7 +144,7 @@ export default function SideBar() {
           justifyContent: "center",
         }}
       >
-        <AvatarStyled icon={!profileUser || !profileUser?.avatar ? <UserOutlined />: <img src={profileUser?.avatar} alt='avatar' />}>
+        <AvatarStyled icon={(!profileUser || !profileUser?.avatar) ? <UserOutlined />: <img src={profileUser?.avatar} alt='avatar' />}>
           
         </AvatarStyled>
         {

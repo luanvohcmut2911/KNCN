@@ -12,7 +12,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { createSearchParams, useNavigate } from "react-router-dom";
 import UserDefault from "../asset/user.png";
-import FilmDefault from "../asset/filmSample.jpg";
+import FilmDefault from "../asset/default.png";
 import axios from "axios";
 
 const CardStyled = styled(Card)`
@@ -34,8 +34,8 @@ export default function ContentCard({ props }) {
     setFollow(!follow);
   };
   React.useEffect(()=>{
-    if(!image && !title && type==='shows'){ // handle for actor credit shows
-      axios.get(process.env.REACT_APP_API + `shows/${id}`)
+    if(!image && !title){ // handle for actor credit shows
+      axios.get(process.env.REACT_APP_API + `${type}/${id}`)
         .then((result)=>{
           setAdditionalData(result.data);
         })
