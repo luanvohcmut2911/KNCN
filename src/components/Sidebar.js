@@ -86,7 +86,7 @@ export default function SideBar() {
       navigate({
         pathname: `/${selector.key}`,
         search: `${createSearchParams({
-          ref: `nv_home->${selector.key}`
+          ref: `nv_${selector.key}`
         })}`
       });
     }

@@ -39,6 +39,7 @@ export default function UsernameSignUp() {
       token: query.get("id_token")
     }).then((docRef)=>{
       console.log('Data is wrote with id: ', docRef.id);
+      navigate('/');
     })
   }
   return (
