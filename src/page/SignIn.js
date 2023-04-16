@@ -38,7 +38,6 @@ export default function SignIn() {
 
   const onFinish= (value)=>{
     handleEmailLogin(value.email, value.password).then((res)=>{
-      console.log(res);
       if(res.isVerified){
         navigate({
           pathname: '/',

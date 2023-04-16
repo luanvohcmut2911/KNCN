@@ -117,7 +117,6 @@ export default function Home() {
       });
 
       container.addEventListener("click", ()=>{
-        console.log('click');
         navigate({
           pathname: '/film',
           search: `${createSearchParams({

@@ -6,7 +6,6 @@ export const handleEmailLogin = async (email, password) => {
   let isNewUser = false;
   await signInWithEmailAndPassword(auth, email, password)
     .then((userCredential)=>{
-      console.log(userCredential.user);
       window.sessionStorage.setItem('user', JSON.stringify({
         isNewUser: getAdditionalUserInfo(userCredential).isNewUser,
         displayName: userCredential.user.displayName,
@@ -30,7 +29,6 @@ export const createNewUser = async (email, password)=>{
   let isVerified = false;
   await createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential)=>{
-      console.log(userCredential.user);
       window.sessionStorage.setItem('user', JSON.stringify({
         isNewUser: getAdditionalUserInfo(userCredential).isNewUser,
         displayName: userCredential.user.displayName,

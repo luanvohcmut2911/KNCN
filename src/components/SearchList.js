@@ -15,14 +15,12 @@ export default function SearchList(props) {
   const { keyword } = props;
   const [castData, setCastData] = React.useState([]);
   const [filmData, setFilmData] = React.useState([]);
-  console.log(keyword);
   React.useEffect(()=>{
+    axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
     axios.get(process.env.REACT_APP_API + `search/shows?q=${keyword}`).then((result)=>{
-      console.log(result.data);
       setFilmData(result.data);
     });
     axios.get(process.env.REACT_APP_API + `search/people?q=${keyword}`).then((result)=>{
-      console.log(result.data);
       setCastData(result.data);
     });
   }, [keyword]);

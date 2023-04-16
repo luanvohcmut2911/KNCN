@@ -1,6 +1,7 @@
 import React from "react";
-import { Comment, Icon } from "@ant-design/compatible";
-import { Tooltip } from "antd";
+import { Comment } from "@ant-design/compatible";
+import {Tooltip} from 'antd';
+import { LikeFilled, LikeOutlined, DislikeFilled, DislikeOutlined } from '@ant-design/icons';
 import moment from "moment/moment";
 
 const initValue = {
@@ -9,7 +10,13 @@ const initValue = {
   action: null,
 };
 
+let previousAction = '';
+
 const reducer = (state, action) => {
+  if(previousAction === action){
+    return state;
+  }
+  previousAction = action;
   switch (action) {
     case "LIKED":
       return {
@@ -35,29 +42,31 @@ export default function CommentCard(props) {
 
   const { author, avatar, content, datetime } = props;
   const actions = [
-    <span key="comment-basic-like">
-      <Tooltip title="Like">
-        <Icon
-          type="like"
-          theme={state.action === "LIKED" ? "filled" : "outlined"}
-          onClick={() => {
-            dispatch("LIKED");
-          }}
-        />
-      </Tooltip>
-      <span style={{ paddingLeft: 8, cursor: "auto" }}>{state.likes}</span>
+    <span key="comment-basic-like" style={{
+      display: 'flex'
+    }}>
+      <div onClick={()=>{
+          dispatch("LIKED");
+        }} >
+          {
+            state.action === 'LIKED' ? <LikeFilled /> : <LikeOutlined />
+          }
+          
+        </div>
+        <span style={{ paddingLeft: 8, cursor: "auto" }}>{state.likes}</span>
     </span>,
-    <span key=' key="comment-basic-dislike"'>
-      <Tooltip title="Dislike">
-        <Icon
-          type="dislike"
-          theme={state.action === "DISLIKED" ? "filled" : "outlined"}
-          onClick={() => {
-            dispatch("DISLIKED");
-          }}
-        />
-      </Tooltip>
-      <span style={{ paddingLeft: 8, cursor: "auto" }}>{state.dislikes}</span>
+    <span key=' key="comment-basic-dislike"' style={{
+      display: 'flex'
+    }}>
+      <div onClick={()=>{
+          dispatch("DISLIKED");
+        }} >
+          {
+            state.action === 'DISLIKED' ? <DislikeFilled /> : <DislikeOutlined />
+          }
+          
+        </div>
+        <span style={{ paddingLeft: 8, cursor: "auto" }}>{state.dislikes}</span>
     </span>,
   ];
 

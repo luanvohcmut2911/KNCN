@@ -36,7 +36,6 @@ export default function SignUp() {
   }, [query, navigate]);
 
   const onFinish = (value) => {
-    console.log(value);
     if (value.password === value.passwordConfirm) {
       createNewUser(value.email, value.password).then((res)=>{
         navigate({

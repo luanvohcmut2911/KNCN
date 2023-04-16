@@ -35,6 +35,7 @@ export default function ContentCard({ props }) {
   };
   React.useEffect(()=>{
     if(!image && !title){ // handle for actor credit shows
+      axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
       axios.get(process.env.REACT_APP_API + `${type}/${id}`)
         .then((result)=>{
           setAdditionalData(result.data);

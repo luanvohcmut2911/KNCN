@@ -34,6 +34,7 @@ export default function FilmDetail({ props }) {
   const [filmCastData, setFilmCastData] = React.useState(null);
   const [disappear, setDisappear] = React.useState(true);
   React.useEffect(() => {
+    axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
     axios.get(process.env.REACT_APP_API + `shows/${id}`).then((result) => {
       setFilmData(result.data);
     });

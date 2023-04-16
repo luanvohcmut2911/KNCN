@@ -29,7 +29,6 @@ const DarkBackground = styled.div`
 
 export default function Loading({props}) {
   const {disappear} = props;
-  console.log(props);
   return (
     <DarkBackground disappear={disappear}> 
       <LoadingOverlay

@@ -48,14 +48,6 @@ export default function Search() {
             setKeyword(e.target.value);
           }}
         ></InputStyled>
-        {/* <ButtonStyled
-          type="primary"
-          onClick={() => {
-            console.log(keyword);
-          }}
-        >
-          SEARCH
-        </ButtonStyled> */}
         <Typography.Title style={{ color: "white" }}>
           EXPLORE YOUR INTERESTING FILMS AND ACTORS
         </Typography.Title>

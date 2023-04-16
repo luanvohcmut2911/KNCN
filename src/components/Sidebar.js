@@ -50,9 +50,7 @@ export default function SideBar() {
         operator: '==',
         compareValue: profileUser?.uid
       }).then((docSnap)=>{
-        console.log(docSnap);
         docSnap.forEach((doc)=>{
-          console.log(doc);
           setUsername(doc.data().username);
           window.sessionStorage.setItem('username', doc.data().username);
         })
@@ -166,7 +164,7 @@ export default function SideBar() {
             ? "home"
             : location.pathname.split("/")[1],
         ]}
-        onSelect={handleSelect}
+        onClick={handleSelect}
         mode="inline"
         items={endPoint}
       />

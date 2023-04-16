@@ -31,6 +31,7 @@ export default function ActorDetail({props}) {
   const [ actorCreditData, setActorCreditData ] = React.useState(null);
   const [disappear, setDisappear] = React.useState(true);
   React.useEffect(()=>{
+    axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
     axios.get(process.env.REACT_APP_API + `people/${id}`).then((result)=>{
       setActorData(result.data);
     });

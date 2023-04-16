@@ -1,6 +1,6 @@
 import React from "react";
 import ContentCard from "./ContentCard";
-import { Layout, Breadcrumb } from "antd";
+import { Layout, Breadcrumb, Pagination } from "antd";
 import styled from "styled-components";
 import axios from "axios";
 import Loading from "./Loading";
@@ -24,11 +24,12 @@ const ContentStyled = styled(Content)`
 
 export default function ContentList(props) {
   const [data, setData] = React.useState([]);
+  const [currentPage, setCurrentPage] = React.useState(1);
   const { type } = props;
   const [disappear, setDisappear] = React.useState(true);
   React.useEffect(() => {
+    axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
     axios.get(process.env.REACT_APP_API + type).then((result) => {
-      console.log(result.data);
       setData(result.data);
     });
   }, [type]);
@@ -55,7 +56,7 @@ export default function ContentList(props) {
           ]}
         />
         <ContentWrapperStyled>
-          {data.slice(0, 8).map((item) => {
+          {data.slice(((currentPage-1)*16), (currentPage*16)).map((item) => {
             return (
               <ContentCard
                 key={item?.id}
@@ -72,6 +73,24 @@ export default function ContentList(props) {
             );
           })}
         </ContentWrapperStyled>
+        <Pagination
+          style={{
+            backgroundColor: 'white',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: '2rem'
+          }}
+          defaultCurrent={1}
+          defaultPageSize={16}
+          showSizeChanger={false}
+          current={currentPage}
+          onChange={(value)=>{
+            setCurrentPage(value);
+          }}
+          total={data.length}
+        />
+
       </ContentStyled>
     </Layout.Content>
   );
