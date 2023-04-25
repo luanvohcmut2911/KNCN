@@ -96,12 +96,12 @@ export default function Home() {
     function startAnimation() {
       animation = setInterval(function () {
         var currentBottom = parseInt(floatingImage1.style.bottom, 10) || 0;
-        if (currentBottom >= 2000) {
+        if (currentBottom >= 500) {
           clearInterval(animation);
           floatingImage1.style.display = "none";
           setTimeout(function () {
             floatingImage1.style.display = "block";
-            floatingImage1.style.bottom = "-500px";
+            floatingImage1.style.bottom = "-200px";
             startAnimation(); // Start the animation again
           }, 30);
         } else {
@@ -141,7 +141,7 @@ export default function Home() {
     startAnimation();
   }, [navigate]);
   return (
-    <Layout style={{ height: "100vh" }}>
+    <Layout style={{ height: "100vh", overflow: 'hidden' }}>
       <section
         className="container"
         style={{
