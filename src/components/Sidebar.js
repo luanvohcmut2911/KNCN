@@ -132,7 +132,7 @@ export default function SideBar() {
       }}
     >
       <SideBarStyled>
-        <Typography style={{ color: "white" }}> Review App </Typography>
+        {/* <Typography style={{ color: "white" }}> </Typography> */}
       </SideBarStyled>
       <div
         style={{
@@ -140,6 +140,7 @@ export default function SideBar() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
+          marginTop: '1rem'
         }}
       >
         <AvatarStyled icon={(!profileUser || !profileUser?.avatar) ? <UserOutlined />: <img src={profileUser?.avatar} alt='avatar' />}>
